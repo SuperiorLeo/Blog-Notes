@@ -1,0 +1,203 @@
+﻿# bilibili视频对应笔记
+
+## 一、声明
+
+1. 声明：
+   1. 本视频初衷是快速写一个简易app，灵感来源是项目设计
+   2. 如果想进一步了解，深入学习，可以参考b站 **天哥在奔跑**
+   3. 我是根据自己做完项目设计的经验，提取我觉得重要和经常用到的点来给大家讲
+2. 简述as布局、每个部分作用和放什么文件、以及一些规范
+   1. 命名规范---英文命名
+   2. 文件放置规范----分包放置
+
+## 二、基本布局介绍
+
+1. linearlayout
+   1. orientation
+   2. background
+   3. padding
+2. relativelayout
+   1. layout_below等设置好相对布局情况
+
+## 三、基本控件1之制作登录界面
+
+1. textview、button、edittext---->简易登录界面
+   1. 什么是textview、button、edittext
+   2. 讲解属性、设置
+
+2. 优化登录界面
+   1. 背景设置
+   2. 外框和圆角
+
+3. 实现具体功能
+   1. button跳转【基本步骤】
+      1. 两个activity
+      2. 跳转前界面--->跳转后界面
+      3. 声明控件--找到控件--实现跳转
+   2. 匹配对应用户名和密码--只讲一种方法，因为实际操作时通过插卡来实现，所以这里没有必要复杂化
+      1. 获取edittest里面的用户名和密码
+      2. 与规定进行匹配
+      3. 成功则进行跳转
+
+4. 优化之Toast讲解
+
+   1. 一般底部弹出
+
+      1. ```java
+         Toast.makeText(getApplicationContext(),"Toast",Toast.LENGTH_SHORT).show();
+         ```
+
+   2. 居中弹出
+
+      1. 首先将toast的内容找到
+
+      2. 设置这个toast的布局
+
+      3. 进行show
+
+      4. ```java
+         Toast toastCenter = Toast.makeText(getApplicationContext(),"居中Toast",Toast.LENGTH_SHORT);//没有show
+         toastCenter.setGravity(Gravity.CENTER,0,0);
+         toastCenter.show();
+         ```
+
+   3. 封装好的类**建议以后用这个
+
+      1. ```java
+         package com.example.t04.util;
+         
+         import android.content.Context;
+         import android.widget.Toast;
+         
+         //进行一个简单的封装
+         //现在可以不用封装
+         public class ToastUtil {
+             public static Toast mToast;
+             public static void showMsg(Context context, String msg){
+                 if ((mToast == null)){
+                     mToast = Toast.makeText(context,msg,Toast.LENGTH_LONG);
+                 }else {
+                     mToast.setText(msg);
+                 }
+                 mToast.show();
+             }
+         
+         }
+         ```
+
+## 四、如何做侧滑界面
+
+### 第一节课-布局
+
+1. 主acticity里面利用slidemenu作为容器放置两个布局文件
+2. 主布局和两个侧滑的布局文件设置
+   1. 其中会涉及到cardview组件、imageview组件
+   2. view组件
+   3. 封装类进行图片 文字 图片的组合
+   4. 总体布局类似于qq界面
+
+### 第二节课-java文件
+
+1. 讲解对应的java文件如何实现
+2. 涉及到Menu也就是两个布局文件的转换的java代码
+3. 讲解一个漂亮的跳转写法***
+   1. setlistener--setOnClickListerner
+   2. Onclick---intent (通过的是getID--对应不同的intent)**不要忘了最后的startactivity
+   3. onCreate里面要调用我们的setListener
+
+### 总结
+
+1. SlideActivity（用于各种控件设置和调用侧滑的方法实现）
+2. SlideMenu（写一个侧滑的具体方法，大家直接拿去用就好了，如果想要仔细了解，后面如果有时间，我再更新，因为我觉得，如果你对java不了解，也学不懂，最重要的是如何使用别人的方法，实现自己的功能）
+3. 三个布局文件
+   1. 容器 acticity_slide
+   2. 正面布局 layout_main
+   3. 侧滑菜单 layout_menu
+
+## 五、Scrollview和单选框、复选框
+
+1. scrollview
+   1. 与linearlayout不同的是，这个布局可以滑动，适合屏幕长度显示不完的界面
+   2. 注意点---除了设置orientation之外，scrollview里面只能有一个主要控件
+   3. 解决办法就是用一个总的linearlayout盛放所有控件
+   4. 需要注意的是
+      1. 如果orientation是horizontal，则宽度应该设置为wrap_content
+      2. 如果orientation是vertical，则高度应该设置为wrap_content
+
+2. radiobutton
+
+   1. radiogroup--radiobutton
+
+   2. ```html
+      <RadioGroup
+          android:id="@+id/rg_1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:layout_marginLeft="60dp">
+      
+          <RadioButton
+              android:id="@+id/rb_1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="男"
+              android:textSize="20sp"
+              android:textColor="#000000"
+              android:checked="true"
+              />
+      
+          <RadioButton
+              android:id="@+id/rb_2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="女"
+              android:textColor="#000000"
+              android:textSize="20sp"/>
+      
+      </RadioGroup>
+      ```
+
+3. checkbox
+
+   1. ```html
+      <CheckBox
+          android:id="@+id/cb_2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="ios"
+          android:textSize="20sp"
+          android:layout_below="@id/cb_1"
+          android:paddingLeft="10dp"/>
+      ```
+
+4. 对应监听事件
+
+   1. ```java
+      mCb5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+          @Override
+          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+              Toast.makeText(CheckBoxActivity.this,isChecked?"选中":"未选中",Toast.LENGTH_SHORT).show();
+          }
+      });
+      ```
+
+   2. ```java
+      mRg1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+          @Override
+          //监听事件
+          public void onCheckedChanged(RadioGroup group, int checkedId) {
+              RadioButton radioButton = (RadioButton) group.findViewById(checkedId);
+              Toast.makeText(RadioButtonActivity.this,radioButton.getText(),Toast.LENGTH_SHORT).show();
+          }
+      });
+      ```
+
+## 六、RecyclerView和Adapter写法
+
+1. Recycler
+   1. 主布局中写recyclerview
+   2. 画其中每一个部分显示的布局
+   3. 最后用adapter实现最终布局的显示
+2. 主布局和每个part的布局-----布局文件
+3. 主布局对应的java文件、adapter的Java文件---java文件
+
